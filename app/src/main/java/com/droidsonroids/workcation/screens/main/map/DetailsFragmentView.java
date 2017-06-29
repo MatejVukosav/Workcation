@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface DetailsFragmentView extends MvpView {
-    void drawPolylinesOnMap(ArrayList<LatLng> decode);
+    void drawPolyLinesOnMap( ArrayList<LatLng> decode);
 
     void provideBaliData(List<Place> places);
 

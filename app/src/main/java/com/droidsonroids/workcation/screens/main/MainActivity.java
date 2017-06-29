@@ -79,6 +79,16 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 MapsUtil.calculateHeight( getWindowManager(), getResources().getDimensionPixelSize( R.dimen.map_margin_bottom ) ), 150 ) );
         googleMap.setOnMapLoadedCallback( () -> googleMap.snapshot( presenter::saveBitmap ) );
 
+        //TODO permission
+        googleMap.setMyLocationEnabled( true );
+
+        googleMap.getUiSettings().setMyLocationButtonEnabled( true );
+        googleMap.getUiSettings().setCompassEnabled( true );
+
+        googleMap.getUiSettings().setMapToolbarEnabled( true );
+        googleMap.getUiSettings().setAllGesturesEnabled( true );
+
+
         onItemExploreClicked();
     }
 

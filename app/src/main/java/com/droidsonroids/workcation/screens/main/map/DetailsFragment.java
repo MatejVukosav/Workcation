@@ -32,7 +32,11 @@ import java.util.List;
 import butterknife.BindView;
 
 public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFragmentPresenter>
-        implements DetailsFragmentView, OnMapReadyCallback, BaliPlacesAdapter.OnPlaceClickListener, HorizontalRecyclerViewScrollListener.OnItemCoverListener {
+        implements DetailsFragmentView,
+        OnMapReadyCallback,
+        BaliPlacesAdapter.OnPlaceClickListener,
+        HorizontalRecyclerViewScrollListener.OnItemCoverListener,
+        PulseOverlayLayout.OnClick {
     public static final String TAG = DetailsFragment.class.getSimpleName();
 
     @BindView(R.id.recyclerview)
@@ -90,6 +94,7 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
         setupBaliData();
         setupMapFragment();
         setupRecyclerView();
+
     }
 
     private void setupBaliData() {
@@ -97,11 +102,14 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
     }
 
     private void setupMapFragment() {
-        ( (SupportMapFragment) getChildFragmentManager().findFragmentById( R.id.mapFragment ) ).getMapAsync( this );
+        ( (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById( R.id.mapFragment ) )
+                .getMapAsync( this );
     }
 
     private void setupRecyclerView() {
-        recyclerView.setLayoutManager( new LinearLayoutManager( getContext(), LinearLayoutManager.HORIZONTAL, false ) );
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager( getContext(), LinearLayoutManager.HORIZONTAL, false ) );
         baliAdapter = new BaliPlacesAdapter( this, getActivity() );
     }
 
@@ -141,8 +149,8 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
     }
 
     @Override
-    public void drawPolylinesOnMap( final ArrayList<LatLng> polylines ) {
-        getActivity().runOnUiThread( () -> mapOverlayLayout.addPolyline( polylines ) );
+    public void drawPolyLinesOnMap( final ArrayList<LatLng> polyLines ) {
+        getActivity().runOnUiThread( () -> mapOverlayLayout.addPolyline( polyLines ) );
     }
 
     @Override
@@ -171,7 +179,7 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
         mapOverlayLayout.moveCamera( latLngBounds );
         mapOverlayLayout.setOnCameraIdleListener( () -> {
             for( int i = 0; i < baliPlaces.size(); i++ ) {
-                mapOverlayLayout.createAndShowMarker( i, baliPlaces.get( i ).getLatLng() );
+                mapOverlayLayout.createAndShowMarker( this, i, baliPlaces.get( i ).getLatLng() );
             }
             mapOverlayLayout.setOnCameraIdleListener( null );
         } );
@@ -188,7 +196,7 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
 
     @Override
     public void onItemCover( final int position ) {
-        mapOverlayLayout.showMarker( position );
+        // mapOverlayLayout.showMarker( position );
     }
 
     @Override
@@ -200,5 +208,11 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
             mapOverlayLayout.animateCamera( new LatLngBounds( latLng, latLng ) );
         } );
 
+    }
+
+    @Override
+    public void onMarkerClick( int position ) {
+        recyclerView.smoothScrollToPosition( position );
+        mapOverlayLayout.showMarker( position );
     }
 }

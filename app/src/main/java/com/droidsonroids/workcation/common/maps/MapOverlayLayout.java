@@ -1,14 +1,11 @@
 package com.droidsonroids.workcation.common.maps;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -120,6 +117,7 @@ public class MapOverlayLayout<V extends MarkerView> extends FrameLayout {
         Criteria criteria = new Criteria();
         LocationManager locationManager = (LocationManager) context.getSystemService( Context.LOCATION_SERVICE );
         String provider = locationManager.getBestProvider( criteria, false );
+        //TODO permission
         Location location = locationManager.getLastKnownLocation( provider );
         double lat = location.getLatitude();
         double lng = location.getLongitude();

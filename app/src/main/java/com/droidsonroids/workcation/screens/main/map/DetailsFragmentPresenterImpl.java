@@ -67,6 +67,6 @@ public class DetailsFragmentPresenterImpl extends MvpPresenterImpl<DetailsFragme
     }
 
     private void providePolylineToDraw( final String points ) {
-        getView().drawPolylinesOnMap( new ArrayList<>( PolyUtil.decode( points ) ) );
+        getView().drawPolyLinesOnMap( new ArrayList<>( PolyUtil.decode( points ) ) );
     }
 }

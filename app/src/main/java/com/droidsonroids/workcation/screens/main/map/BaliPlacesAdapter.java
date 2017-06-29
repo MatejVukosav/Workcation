@@ -1,6 +1,7 @@
 package com.droidsonroids.workcation.screens.main.map;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +43,9 @@ class BaliPlacesAdapter extends RecyclerView.Adapter<BaliPlacesAdapter.BaliViewH
         holder.title.setText( placeList.get( position ).getName() );
         holder.openingHours.setText( placeList.get( position ).getOpeningHours() );
         holder.price.setText( String.valueOf( placeList.get( position ).getPrice() ) );
-        holder.placePhoto.setImageDrawable( ContextCompat.getDrawable( context, R.drawable.monkey_forest_1 ) );
+
+        Drawable drawable = ContextCompat.getDrawable( context, context.getResources().getIdentifier( placeList.get( position ).getPhotoList().get( 0 ), "drawable", context.getPackageName() ) );
+        holder.placePhoto.setImageDrawable( drawable );
         holder.root.setOnClickListener( view -> listener.onPlaceClicked( holder.root, TransitionUtils.getRecyclerViewTransitionName( position ), position ) );
         holder.number.setNumber( position );
 
