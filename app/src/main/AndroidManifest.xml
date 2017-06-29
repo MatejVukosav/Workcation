@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.droidsonroids.workcation">
+<manifest package="com.droidsonroids.workcation"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
+        android:name=".common.WorkcationApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".common.WorkcationApp">
+        android:theme="@style/AppTheme">
 
-        <uses-library android:name="com.google.android.maps" />
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBdnGCVMWokypaPplS8axxs-fFD1K9W-Oc"/>
+        <uses-library android:name="com.google.android.maps"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBpNurYQS0skziPHoO2uakaUpqAhdS2hd8"/>
 
         <activity
             android:name=".screens.main.MainActivity"
-            android:theme="@style/MainActivityTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/MainActivityTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 

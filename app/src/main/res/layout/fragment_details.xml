@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:orientation="vertical">
 
     <fragment
         android:id="@+id/mapFragment"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/map_margin_bottom" />
+        android:layout_height="match_parent"/>
 
     <com.droidsonroids.workcation.common.maps.PulseOverlayLayout
         android:id="@+id/mapOverlayLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/map_margin_bottom">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/mapPlaceholder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:transitionName="@string/mapPlaceholderTransition"/>
+            android:transitionName="@string/mapPlaceholderTransition"
+            />
 
-        </com.droidsonroids.workcation.common.maps.PulseOverlayLayout>
+    </com.droidsonroids.workcation.common.maps.PulseOverlayLayout>
 
     <FrameLayout
         android:id="@+id/container"
@@ -34,7 +34,9 @@
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
 
     </FrameLayout>
 

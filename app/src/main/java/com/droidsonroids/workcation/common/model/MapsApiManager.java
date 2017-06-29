@@ -1,15 +1,11 @@
 package com.droidsonroids.workcation.common.model;
 
-import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
-import java.io.IOException;
-import okhttp3.Call;
+
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class MapsApiManager {
@@ -35,7 +31,8 @@ public class MapsApiManager {
     }
 
     public void getRoute(final LatLng start, final LatLng end, final Callback callback) {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(RestConstants.BASE_URL).newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(RestConstants.BASE_URL)
+                .newBuilder();
         urlBuilder.addQueryParameter(ORIGIN, start.latitude + "," + start.longitude);
         urlBuilder.addQueryParameter(DESTINATION, end.latitude + "," + end.longitude);
 

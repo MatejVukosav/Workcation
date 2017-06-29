@@ -1,10 +1,12 @@
 package com.droidsonroids.workcation.common.model;
 
 import android.content.res.AssetManager;
+
 import com.droidsonroids.workcation.common.WorkcationApp;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,10 +20,11 @@ public class BaliDataProvider {
 
     private BaliData mBaliData;
 
-    private BaliDataProvider() {}
+    private BaliDataProvider() {
+    }
 
     public static BaliDataProvider instance() {
-        if(sInstance == null) {
+        if( sInstance == null ) {
             sInstance = new BaliDataProvider();
             return sInstance;
         }
@@ -33,21 +36,21 @@ public class BaliDataProvider {
             AssetManager assetManager = WorkcationApp.getInstance().getAssets();
             InputStream inputStream;
 
-            inputStream = assetManager.open(JSON_PATH);
+            inputStream = assetManager.open( JSON_PATH );
 
             Gson gson = new Gson();
-            Reader reader = new InputStreamReader(inputStream);
+            Reader reader = new InputStreamReader( inputStream );
 
-            mBaliData = gson.fromJson(reader, BaliData.class);
-        } catch (IOException e) {
+            mBaliData = gson.fromJson( reader, BaliData.class );
+        } catch( IOException e ) {
             e.printStackTrace();
         }
     }
 
     public LatLngBounds provideLatLngBoundsForAllPlaces() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for(Place place : mBaliData.getPlacesList()) {
-            builder.include(new LatLng(place.getLat(), place.getLng()));
+        for( Place place : mBaliData.getPlacesList() ) {
+            builder.include( new LatLng( place.getLat(), place.getLng() ) );
         }
         return builder.build();
     }
@@ -56,11 +59,11 @@ public class BaliDataProvider {
         return mBaliData.getPlacesList();
     }
 
-    public double getLatByPosition(final int position) {
-        return mBaliData.getPlacesList().get(position).getLat();
+    public double getLatByPosition( final int position ) {
+        return mBaliData.getPlacesList().get( position ).getLat();
     }
 
-    public double getLngByPosition(final int position) {
-        return mBaliData.getPlacesList().get(position).getLng();
+    public double getLngByPosition( final int position ) {
+        return mBaliData.getPlacesList().get( position ).getLng();
     }
 }
