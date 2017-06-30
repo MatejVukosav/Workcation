@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<android.support.design.widget.CoordinatorLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,24 +13,31 @@
 
     <com.droidsonroids.workcation.common.maps.CircleView
         android:id="@+id/number"
-        android:layout_width="@dimen/item_recycler_number_dimen"
-        android:layout_height="@dimen/item_recycler_number_dimen"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="8dp"
         android:clickable="true"
         android:elevation="6dp"
         app:layout_anchor="@+id/root"
         app:layout_anchorGravity="top|center_horizontal"
-        />
+        app:layout_constraintBottom_toTopOf="@+id/root"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/root"/>
 
 
     <android.support.v7.widget.CardView
         android:id="@+id/root"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:cardBackgroundColor="#dfffffff"
         app:cardElevation="2dp"
         app:layout_anchorGravity="bottom"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
 
         <RelativeLayout
@@ -43,9 +50,10 @@
                 android:id="@+id/headerImage"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:scaleType="center"
-                tools:src="@color/background_next_trip_start"
-                />
+                tools:src="@color/background_next_trip_start"/>
 
             <com.droidsonroids.workcation.common.views.AutoResizeTextView
                 android:id="@+id/title"
@@ -115,5 +123,5 @@
     </android.support.v7.widget.CardView>
 
 
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>
 

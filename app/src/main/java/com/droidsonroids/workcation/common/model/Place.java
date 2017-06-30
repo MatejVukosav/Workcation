@@ -2,6 +2,7 @@ package com.droidsonroids.workcation.common.model;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Place {
@@ -17,13 +18,17 @@ public class Place {
     private double lat;
     @SerializedName("lng")
     private double lng;
-    @SerializedName("photo") List<String> photo;
+    @SerializedName("photo")
+    List<String> photo;
+
+    private Duration durationFromCurrentLocation;
+    private Distance distanceFromCurrentLocation;
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName( final String name ) {
         this.name = name;
     }
 
@@ -31,7 +36,7 @@ public class Place {
         return openingHours;
     }
 
-    public void setOpeningHours(final String openingHours) {
+    public void setOpeningHours( final String openingHours ) {
         this.openingHours = openingHours;
     }
 
@@ -39,7 +44,7 @@ public class Place {
         return price;
     }
 
-    public void setPrice(final int price) {
+    public void setPrice( final int price ) {
         this.price = price;
     }
 
@@ -47,7 +52,7 @@ public class Place {
         return description;
     }
 
-    public void setDescription(final String description) {
+    public void setDescription( final String description ) {
         this.description = description;
     }
 
@@ -55,7 +60,7 @@ public class Place {
         return lat;
     }
 
-    public void setLat(final double lat) {
+    public void setLat( final double lat ) {
         this.lat = lat;
     }
 
@@ -63,7 +68,7 @@ public class Place {
         return lng;
     }
 
-    public void setLng(final double lng) {
+    public void setLng( final double lng ) {
         this.lng = lng;
     }
 
@@ -71,11 +76,27 @@ public class Place {
         return photo;
     }
 
-    public void setPhotoList(final List<String> photo) {
+    public void setPhotoList( final List<String> photo ) {
         this.photo = photo;
     }
 
     public LatLng getLatLng() {
-        return new LatLng(lat, lng);
+        return new LatLng( lat, lng );
+    }
+
+    public Duration getDurationFromCurrentLocation() {
+        return durationFromCurrentLocation;
+    }
+
+    public void setDurationFromCurrentLocation( Duration durationFromCurrentLocation ) {
+        this.durationFromCurrentLocation = durationFromCurrentLocation;
+    }
+
+    public Distance getDistanceFromCurrentLocation() {
+        return distanceFromCurrentLocation;
+    }
+
+    public void setDistanceFromCurrentLocation( Distance distanceFromCurrentLocation ) {
+        this.distanceFromCurrentLocation = distanceFromCurrentLocation;
     }
 }

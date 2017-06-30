@@ -43,6 +43,50 @@
       "photo": [
         "surfer"
       ]
+    },
+    {
+      "name": "H20 Club",
+      "opening_hours": "08:30-18:00",
+      "price": 40000,
+      "description": "Club with a good music",
+      "lat": 45.804406,
+      "lng": 15.9969466,
+      "photo": [
+        "monkey_forest_1"
+      ]
+    },
+    {
+      "name": "Roko",
+      "opening_hours": "08:00 - 18:00",
+      "price": 0,
+      "description": "Roko is a famous student club",
+      "lat": 45.783967,
+      "lng": 15.948069,
+      "photo": [
+        "surfer"
+      ]
+    },
+    {
+      "name": "FER",
+      "opening_hours": "ALL DAY",
+      "price": 0,
+      "description": "Faculty of Electrical Engineering and Computing",
+      "lat": 45.801121,
+      "lng": 15.970777,
+      "photo": [
+        "monkey_forest_1"
+      ]
+    },
+    {
+      "name": "Trg bana Josipa Jelacica",
+      "opening_hours": "ALL DAY",
+      "price": 0,
+      "description": "Main square",
+      "lat": 45.813002,
+      "lng": 15.977473,
+      "photo": [
+        "surfer"
+      ]
     }
   ]
 }

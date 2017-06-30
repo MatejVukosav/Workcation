@@ -9,6 +9,9 @@ import com.droidsonroids.workcation.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+/**
+ * Layout for pulse number elements over map
+ */
 public class PulseOverlayLayout extends MapOverlayLayout {
     private static final int ANIMATION_DELAY_FACTOR = 100;
 
@@ -24,7 +27,8 @@ public class PulseOverlayLayout extends MapOverlayLayout {
         inflate( context, R.layout.pulse_wrapper_layout, this );
     }
 
-    public void setupMarkers( final Point point, final LatLng latLng ) {
+    @SuppressWarnings("unused")
+    public void setupStartAndFinishMarkers( final Point point, final LatLng latLng ) {
         startMarker = new PulseMarkerView( getContext(), latLng, point );
         finishMarker = new PulseMarkerView( getContext(), latLng, point );
     }
@@ -37,6 +41,7 @@ public class PulseOverlayLayout extends MapOverlayLayout {
         removeMarker( finishMarker );
     }
 
+    @SuppressWarnings("unused")
     public void addStartMarker( final LatLng latLng ) {
         startMarker = createPulseMarkerView( latLng );
         startMarker.updatePulseViewLayoutParams( googleMap.getProjection().toScreenLocation( latLng ) );
@@ -44,8 +49,9 @@ public class PulseOverlayLayout extends MapOverlayLayout {
         startMarker.show();
     }
 
-    public void addFinishMarker( final LatLng latLng ) {
+    public void addFinishMarker( final LatLng latLng, String text ) {
         finishMarker = createPulseMarkerView( latLng );
+        finishMarker.setText( text );
         finishMarker.updatePulseViewLayoutParams( googleMap.getProjection().toScreenLocation( latLng ) );
         addMarker( finishMarker );
         finishMarker.show();
@@ -76,8 +82,8 @@ public class PulseOverlayLayout extends MapOverlayLayout {
     }
 
     public void drawStartAndFinishMarker() {
-        addStartMarker( (LatLng) polylines.get( 0 ) );
-        addFinishMarker( (LatLng) polylines.get( polylines.size() - 1 ) );
+        //   addStartMarker( (LatLng) polyLines.get( 0 ) );
+        addFinishMarker( polyLines.get( polyLines.size() - 1 ), "X" );
         setOnCameraIdleListener( null );
     }
 

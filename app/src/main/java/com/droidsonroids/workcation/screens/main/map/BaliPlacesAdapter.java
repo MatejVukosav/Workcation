@@ -8,6 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +56,27 @@ class BaliPlacesAdapter extends RecyclerView.Adapter<BaliPlacesAdapter.BaliViewH
         holder.number.setOnClickListener( v -> {
             listener.onNumberClicked( position );
         } );
+
+        setFadeAnimation( holder.itemView, position );
+    }
+
+    private int lastAnimatedPosition = -1;
+
+    private void setFadeAnimation( View view, int position ) {
+
+        if( position > lastAnimatedPosition ) {
+            lastAnimatedPosition = position;
+            AlphaAnimation anim = new AlphaAnimation( 0.f, 1.0f );
+            anim.setDuration( 500 );
+            anim.setStartTime( AnimationUtils.currentAnimationTimeMillis() );
+
+            ScaleAnimation scale = new ScaleAnimation( 0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f );
+            scale.setDuration( 500 );
+            anim.setStartTime( AnimationUtils.currentAnimationTimeMillis() );
+
+            view.startAnimation( anim );
+            view.startAnimation( scale );
+        }
     }
 
     @Override
@@ -92,4 +117,5 @@ class BaliPlacesAdapter extends RecyclerView.Adapter<BaliPlacesAdapter.BaliViewH
             ButterKnife.bind( this, itemView );
         }
     }
+
 }

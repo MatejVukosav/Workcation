@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:orientation="vertical">
 
     <fragment
         android:id="@+id/mapFragment"
-        class="com.google.android.gms.maps.SupportMapFragment"
+        class="com.droidsonroids.workcation.screens.main.map.MySupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/map_margin_bottom_100"/>
 
     <com.droidsonroids.workcation.common.maps.PulseOverlayLayout
         android:id="@+id/mapOverlayLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/mapPlaceholder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:transitionName="@string/mapPlaceholderTransition"
-            />
-
-    </com.droidsonroids.workcation.common.maps.PulseOverlayLayout>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/map_margin_bottom_100"
+        />
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"

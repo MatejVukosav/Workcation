@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import com.droidsonroids.workcation.R;
 
 /**
+ * View that make circle with number for card numeration in location fragment
  * Created by Vuki on 29.6.2017..
  */
 
@@ -50,6 +51,7 @@ public class CircleView extends View {
         init();
     }
 
+    @SuppressWarnings("unused")
     public CircleView( Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes ) {
         super( context, attrs, defStyleAttr, defStyleRes );
         this.context = context;
@@ -123,10 +125,12 @@ public class CircleView extends View {
         animationScaleSmall.setDuration( 500 );
     }
 
+    @SuppressWarnings("unused")
     public void shrink() {
         startAnimation( animationScaleSmall );
     }
 
+    @SuppressWarnings("unused")
     public void strech() {
         startAnimation( animationScaleLarge );
     }

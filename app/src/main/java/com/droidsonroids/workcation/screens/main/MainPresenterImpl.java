@@ -13,6 +13,7 @@ public class MainPresenterImpl extends MvpPresenterImpl<MainView> implements Mai
 
     @Override
     public void provideMapLatLngBounds() {
-        getView().setMapLatLngBounds(BaliDataProvider.instance().provideLatLngBoundsForAllPlaces());
+        getView()
+                .setMapLatLngBounds(BaliDataProvider.instance().provideLatLngBoundsForAllPlaces());
     }
 }

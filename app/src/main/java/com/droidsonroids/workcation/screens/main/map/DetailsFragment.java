@@ -1,9 +1,13 @@
 package com.droidsonroids.workcation.screens.main.map;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Scene;
@@ -13,6 +17,8 @@ import android.widget.FrameLayout;
 import com.droidsonroids.workcation.R;
 import com.droidsonroids.workcation.common.maps.MapBitmapCache;
 import com.droidsonroids.workcation.common.maps.PulseOverlayLayout;
+import com.droidsonroids.workcation.common.model.Distance;
+import com.droidsonroids.workcation.common.model.Duration;
 import com.droidsonroids.workcation.common.model.Place;
 import com.droidsonroids.workcation.common.mvp.MvpFragment;
 import com.droidsonroids.workcation.common.transitions.ScaleDownImageTransition;
@@ -22,7 +28,6 @@ import com.droidsonroids.workcation.common.views.TranslateItemAnimator;
 import com.droidsonroids.workcation.screens.main.MainActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -31,16 +36,22 @@ import java.util.List;
 
 import butterknife.BindView;
 
+/**
+ * Location fragment showing locations on map
+ */
 public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFragmentPresenter>
         implements DetailsFragmentView,
         OnMapReadyCallback,
         BaliPlacesAdapter.OnPlaceClickListener,
         HorizontalRecyclerViewScrollListener.OnItemCoverListener,
-        PulseOverlayLayout.OnClick {
+        PulseOverlayLayout.OnClick,
+        MapInterface {
+
     public static final String TAG = DetailsFragment.class.getSimpleName();
 
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
+
     @BindView(R.id.container)
     FrameLayout containerLayout;
     @BindView(R.id.mapOverlayLayout)
@@ -50,6 +61,8 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
     private BaliPlacesAdapter baliAdapter;
     private String currentTransitionName;
     private Scene detailsScene;
+    private DetailsLayout detailsLayout;
+    public boolean isDetailsLayoutHidden = true;
 
     public static Fragment newInstance( final Context ctx ) {
         DetailsFragment fragment = new DetailsFragment();
@@ -67,7 +80,7 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
 
     @Override
     public void onBackPressed() {
-        if( detailsScene != null ) {
+        if( detailsLayout != null ) {
             presenter.onBackPressedWithScene();
         } else {
             ( (MainActivity) getActivity() ).superOnBackPressed();
@@ -102,9 +115,27 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
     }
 
     private void setupMapFragment() {
-        ( (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById( R.id.mapFragment ) )
-                .getMapAsync( this );
+        MySupportMapFragment mySupportMapFragment = ( (MySupportMapFragment) getChildFragmentManager()
+                .findFragmentById( R.id.mapFragment ) );
+
+        mySupportMapFragment.setListener( this );
+        mySupportMapFragment.getMapAsync( this );
+    }
+
+    private boolean isRecyclerHiden = false;
+
+    private void translateLowRecycler( View view ) {
+        ViewCompat.animate( view )
+                .translationYBy( recyclerView.getHeight() / 2.5f )
+                .setDuration( 100 )
+                .start();
+    }
+
+    private void translateNormalRecycler( View view ) {
+        ViewCompat.animate( view )
+                .translationYBy( -recyclerView.getHeight() / 2.5f )
+                .setDuration( 100 )
+                .start();
     }
 
     private void setupRecyclerView() {
@@ -134,13 +165,22 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
     @Override
     public void onPlaceClicked( final View sharedView, final String transitionName, final int position ) {
         currentTransitionName = transitionName;
-        detailsScene = DetailsLayout.showScene( getActivity(), containerLayout, sharedView, transitionName, baliPlaces.get( position ) );
+        detailsLayout = DetailsLayout
+                .showScene( getActivity(), containerLayout, sharedView, transitionName, baliPlaces.get( position ) );
+
         drawRoute( position );
         hideAllMarkers();
+        isDetailsLayoutHidden = false;
     }
 
     private void drawRoute( final int position ) {
-        presenter.drawRoute( mapOverlayLayout.getCurrentLatLng( getContext() ), position );
+        if( ActivityCompat
+                .checkSelfPermission( getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat
+                .checkSelfPermission( getContext(), Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            // TODO: permission
+            presenter.drawRoute( mapOverlayLayout.getCurrentLatLng( getContext() ), position );
+        }
     }
 
     private void hideAllMarkers() {
@@ -161,10 +201,14 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
     @Override
     public void onBackPressedWithScene( final LatLngBounds latLngBounds ) {
         int childPosition = TransitionUtils.getItemPositionFromTransition( currentTransitionName );
-        DetailsLayout.hideScene( getActivity(), containerLayout, getSharedViewByPosition( childPosition ), currentTransitionName );
+        DetailsLayout
+                .hideScene( getActivity(), containerLayout, getSharedViewByPosition( childPosition ), currentTransitionName );
         notifyLayoutAfterBackPress( childPosition );
         mapOverlayLayout.onBackPressed( latLngBounds );
         detailsScene = null;
+        detailsLayout = null;
+        isDetailsLayoutHidden = true;
+
     }
 
     private void notifyLayoutAfterBackPress( final int childPosition ) {
@@ -190,8 +234,20 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
     public void updateMapZoomAndRegion( final LatLng northeastLatLng, final LatLng southwestLatLng ) {
         getActivity().runOnUiThread( () -> {
             mapOverlayLayout.animateCamera( new LatLngBounds( southwestLatLng, northeastLatLng ) );
-            mapOverlayLayout.setOnCameraIdleListener( () -> mapOverlayLayout.drawStartAndFinishMarker() );
+            mapOverlayLayout.setOnCameraIdleListener( () -> {
+                if( !isDetailsLayoutHidden ) {
+                    mapOverlayLayout.drawStartAndFinishMarker();
+                }
+            } );
         } );
+    }
+
+    @Override
+    public void updateData( int position, Distance distance, Duration duration ) {
+        Place place = baliPlaces.get( position );
+        place.setDistanceFromCurrentLocation( distance );
+        place.setDurationFromCurrentLocation( duration );
+        DetailsLayout.setDurationText( getActivity(), containerLayout, duration );
     }
 
     @Override
@@ -205,7 +261,7 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
 
         LatLng latLng = baliPlaces.get( position ).getLatLng();
         getActivity().runOnUiThread( () -> {
-            mapOverlayLayout.animateCamera( new LatLngBounds( latLng, latLng ) );
+            mapOverlayLayout.animateCamera( latLng );
         } );
 
     }
@@ -214,5 +270,21 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentView, DetailsFra
     public void onMarkerClick( int position ) {
         recyclerView.smoothScrollToPosition( position );
         mapOverlayLayout.showMarker( position );
+    }
+
+    @Override
+    public void onMapClicked() {
+        if( !isDetailsLayoutHidden ) {
+            presenter.onBackPressedWithScene();
+        } else {
+            if( isRecyclerHiden ) {
+                translateNormalRecycler( recyclerView );
+                isRecyclerHiden = false;
+            } else {
+                translateLowRecycler( recyclerView );
+                isRecyclerHiden = true;
+
+            }
+        }
     }
 }

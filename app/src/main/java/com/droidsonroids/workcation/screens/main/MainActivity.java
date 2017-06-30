@@ -8,17 +8,17 @@ import com.droidsonroids.workcation.common.mvp.MvpActivity;
 import com.droidsonroids.workcation.common.mvp.MvpFragment;
 import com.droidsonroids.workcation.screens.main.home.HomeFragment;
 import com.droidsonroids.workcation.screens.main.map.DetailsFragment;
+import com.droidsonroids.workcation.screens.main.map.MySupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import butterknife.OnClick;
 
 public class MainActivity extends MvpActivity<MainView, MainPresenter> implements MainView, OnMapReadyCallback {
 
-    SupportMapFragment mapFragment;
+    MySupportMapFragment mapFragment;
     private LatLngBounds mapLatLngBounds;
 
     @Override
@@ -37,10 +37,10 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         presenter.provideMapLatLngBounds();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace( R.id.container, HomeFragment.newInstance(), HomeFragment.TAG )
+                .replace( R.id.container_main, HomeFragment.newInstance(), HomeFragment.TAG )
                 .addToBackStack( HomeFragment.TAG )
                 .commit();
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById( R.id.mapFragment );
+        mapFragment = (MySupportMapFragment) getSupportFragmentManager().findFragmentById( R.id.mapFragment );
         mapFragment.getMapAsync( this );
 
     }
@@ -51,7 +51,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations( android.R.anim.slide_in_left, android.R.anim.slide_out_right )
-                    .replace( R.id.container, DetailsFragment.newInstance( this ), DetailsFragment.TAG )
+                    .replace( R.id.container_main, DetailsFragment.newInstance( this ), DetailsFragment.TAG )
                     .addToBackStack( DetailsFragment.TAG )
                     .commit();
         }
@@ -77,7 +77,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 mapLatLngBounds,
                 MapsUtil.calculateWidth( getWindowManager() ),
                 MapsUtil.calculateHeight( getWindowManager(), getResources().getDimensionPixelSize( R.dimen.map_margin_bottom ) ), 150 ) );
-        googleMap.setOnMapLoadedCallback( () -> googleMap.snapshot( presenter::saveBitmap ) );
+        // googleMap.setOnMapLoadedCallback( () -> googleMap.snapshot( presenter::saveBitmap ) );
 
         //TODO permission
         googleMap.setMyLocationEnabled( true );
@@ -87,7 +87,6 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
         googleMap.getUiSettings().setMapToolbarEnabled( true );
         googleMap.getUiSettings().setAllGesturesEnabled( true );
-
 
         onItemExploreClicked();
     }

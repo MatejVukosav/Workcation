@@ -1,11 +1,13 @@
 package com.droidsonroids.workcation.common.maps;
 
+import android.Manifest;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.annotation.RequiresPermission;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -22,12 +24,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapOverlayLayout<V extends MarkerView> extends FrameLayout {
+public class MapOverlayLayout extends FrameLayout {
 
-    protected List<V> markersList;
+    protected List<MarkerView> markersList;
     protected Polyline currentPolyline;
     protected GoogleMap googleMap;
-    protected ArrayList<LatLng> polylines;
+    protected ArrayList<LatLng> polyLines;
 
     public MapOverlayLayout( final Context context ) {
         this( context, null );
@@ -43,12 +45,12 @@ public class MapOverlayLayout<V extends MarkerView> extends FrameLayout {
         super.onFinishInflate();
     }
 
-    protected void addMarker( final V view ) {
+    protected void addMarker( final MarkerView view ) {
         markersList.add( view );
         addView( view );
     }
 
-    protected void removeMarker( final V view ) {
+    protected void removeMarker( final MarkerView view ) {
         markersList.remove( view );
         removeView( view );
     }
@@ -101,32 +103,39 @@ public class MapOverlayLayout<V extends MarkerView> extends FrameLayout {
         int height = getHeight();
         int padding = MapsUtil.DEFAULT_MAP_PADDING;
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds( bounds, width, height, padding );
+        googleMap.animateCamera( cameraUpdate );
+    }
 
-        CameraPosition cameraPosition = new CameraPosition.Builder().target( bounds.getCenter() )
-                .zoom( 15 )
+    public void animateCamera( final LatLng location ) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target( location )
+                .zoom( MapsUtil.DEFAULT_MAP_PADDING )
                 .build();
         googleMap.animateCamera( CameraUpdateFactory.newCameraPosition( cameraPosition ) );
     }
 
+    @SuppressWarnings("unused")
     public LatLng getCurrentCameraLatLng() {
         return new LatLng( googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude );
     }
 
+    @SuppressWarnings("MissingPermission")
+    @RequiresPermission(allOf = { Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION }
+    )
     public LatLng getCurrentLatLng( Context context ) {
 
         Criteria criteria = new Criteria();
         LocationManager locationManager = (LocationManager) context.getSystemService( Context.LOCATION_SERVICE );
         String provider = locationManager.getBestProvider( criteria, false );
-        //TODO permission
         Location location = locationManager.getLastKnownLocation( provider );
         double lat = location.getLatitude();
         double lng = location.getLongitude();
-        LatLng coordinate = new LatLng( lat, lng );
-        return coordinate;
+        return new LatLng( lat, lng );
     }
 
     public void addPolyline( final ArrayList<LatLng> polylines ) {
-        this.polylines = polylines;
+        this.polyLines = polylines;
         PolylineOptions options = new PolylineOptions();
         for( int i = 1; i < polylines.size(); i++ ) {
             options.add( polylines.get( i - 1 ), polylines.get( i ) ).width( 10 ).color( Color.RED ).geodesic( true );

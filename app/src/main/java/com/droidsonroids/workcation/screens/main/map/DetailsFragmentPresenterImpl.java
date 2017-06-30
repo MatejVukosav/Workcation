@@ -4,6 +4,8 @@ import com.droidsonroids.workcation.common.maps.MapsUtil;
 import com.droidsonroids.workcation.common.model.BaliDataProvider;
 import com.droidsonroids.workcation.common.model.Bounds;
 import com.droidsonroids.workcation.common.model.DirectionsResponse;
+import com.droidsonroids.workcation.common.model.Distance;
+import com.droidsonroids.workcation.common.model.Duration;
 import com.droidsonroids.workcation.common.model.MapsApiManager;
 import com.droidsonroids.workcation.common.model.Route;
 import com.droidsonroids.workcation.common.mvp.MvpPresenterImpl;
@@ -40,8 +42,10 @@ public class DetailsFragmentPresenterImpl extends MvpPresenterImpl<DetailsFragme
                         .fromJson( response.body().charStream(), DirectionsResponse.class )
                         .getRoutes()
                         .get( 0 );
+
                 providePolylineToDraw( route.getOverviewPolyline().getPoints() );
                 updateMapZoomAndRegion( route.getBounds() );
+                updateData( position, route.getLegs().get( 0 ).getDistance(), route.getLegs().get( 0 ).getDuration() );
             }
         } );
     }
@@ -62,11 +66,21 @@ public class DetailsFragmentPresenterImpl extends MvpPresenterImpl<DetailsFragme
     }
 
     private void updateMapZoomAndRegion( final Bounds bounds ) {
-        bounds.getSouthwest().setLat( MapsUtil.increaseLatitude( bounds ) );
-        getView().updateMapZoomAndRegion( bounds.getNortheastLatLng(), bounds.getSouthwestLatLng() );
+        bounds
+                .getSouthwest()
+                .setLat( MapsUtil.increaseLatitude( bounds ) );
+        getView()
+                .updateMapZoomAndRegion( bounds.getNortheastLatLng(), bounds.getSouthwestLatLng() );
     }
 
     private void providePolylineToDraw( final String points ) {
-        getView().drawPolyLinesOnMap( new ArrayList<>( PolyUtil.decode( points ) ) );
+        getView()
+                .drawPolyLinesOnMap( new ArrayList<>( PolyUtil.decode( points ) ) );
+    }
+
+    private void updateData( int position, Distance distance, Duration duration ) {
+        getView()
+                .updateData( position, distance, duration );
+
     }
 }

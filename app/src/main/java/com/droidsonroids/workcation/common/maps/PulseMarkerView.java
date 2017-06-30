@@ -21,6 +21,9 @@ import com.droidsonroids.workcation.R;
 import com.droidsonroids.workcation.common.views.GuiUtils;
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * View representing a marker in pulse overlay layout
+ */
 public class PulseMarkerView extends MarkerView implements View.OnClickListener {
     private static final int STROKE_DIMEN = 2;
 
@@ -45,6 +48,8 @@ public class PulseMarkerView extends MarkerView implements View.OnClickListener 
         setupShowAnimatorSet();
         setupHideAnimatorSet();
     }
+
+
 
     public PulseMarkerView( final Context context, final LatLng latLng, final Point point, final int position ) {
         this( context, latLng, point );
