@@ -1,11 +1,16 @@
 package com.droidsonroids.workcation.screens.main;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 
 import com.droidsonroids.workcation.R;
 import com.droidsonroids.workcation.common.maps.MapsUtil;
 import com.droidsonroids.workcation.common.mvp.MvpActivity;
 import com.droidsonroids.workcation.common.mvp.MvpFragment;
+import com.droidsonroids.workcation.databinding.ActivityMainBinding;
 import com.droidsonroids.workcation.screens.main.home.HomeFragment;
 import com.droidsonroids.workcation.screens.main.map.DetailsFragment;
 import com.droidsonroids.workcation.screens.main.map.MySupportMapFragment;
@@ -21,6 +26,23 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     MySupportMapFragment mapFragment;
     private LatLngBounds mapLatLngBounds;
 
+    ActivityMainBinding binding;
+
+    @Override
+    public void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
+        binding = DataBindingUtil.setContentView( this, R.layout.activity_main );
+
+        presenter.provideMapLatLngBounds();
+
+        mapFragment = new MySupportMapFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace( binding.mapMainFragment.getId(), mapFragment )
+                .commit();
+        mapFragment.getMapAsync( this );
+    }
+
     @Override
     protected MainPresenter createPresenter() {
         return new MainPresenterImpl();
@@ -32,34 +54,8 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     }
 
     @Override
-    protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
-        presenter.provideMapLatLngBounds();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace( R.id.container_main, HomeFragment.newInstance(), HomeFragment.TAG )
-                .addToBackStack( HomeFragment.TAG )
-                .commit();
-        mapFragment = (MySupportMapFragment) getSupportFragmentManager().findFragmentById( R.id.mapFragment );
-        mapFragment.getMapAsync( this );
-
-    }
-
-    @OnClick(R.id.explore)
-    public void onItemExploreClicked() {
-        if( getSupportFragmentManager().findFragmentByTag( DetailsFragment.TAG ) == null ) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations( android.R.anim.slide_in_left, android.R.anim.slide_out_right )
-                    .replace( R.id.container_main, DetailsFragment.newInstance( this ), DetailsFragment.TAG )
-                    .addToBackStack( DetailsFragment.TAG )
-                    .commit();
-        }
-    }
-
-    @Override
     public void onBackPressed() {
-        if( getSupportFragmentManager().getBackStackEntryCount() > 1 ) {
+        if ( getSupportFragmentManager().getBackStackEntryCount() > 1 ) {
             triggerFragmentBackPress( getSupportFragmentManager().getBackStackEntryCount() );
         } else {
             finish();
@@ -88,7 +84,14 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         googleMap.getUiSettings().setMapToolbarEnabled( true );
         googleMap.getUiSettings().setAllGesturesEnabled( true );
 
-        onItemExploreClicked();
+        if ( getSupportFragmentManager().findFragmentByTag( DetailsFragment.TAG ) == null ) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations( android.R.anim.slide_in_left, android.R.anim.slide_out_right )
+                    .replace( R.id.container_main, DetailsFragment.newInstance( this ), DetailsFragment.TAG )
+                    .addToBackStack( DetailsFragment.TAG )
+                    .commit();
+        }
     }
 
     private void triggerFragmentBackPress( final int count ) {

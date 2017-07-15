@@ -43,14 +43,23 @@ public class DetailsLayout extends CoordinatorLayout {
     @BindView(R.id.takeMe)
     Button takeMeBtn;
 
-
-
     public DetailsLayout( final Context context ) {
         this( context, null );
+        init();
     }
 
     public DetailsLayout( final Context context, final AttributeSet attrs ) {
         super( context, attrs );
+        init();
+    }
+
+    private void init() {
+//        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+//        inflater.inflate( R.layout.item_place, this );
+//
+//        ViewDataBinding binding = DataBindingUtil.inflate( inflater,
+//                R.layout.item_place, this, true );
+
     }
 
     @Override
@@ -60,6 +69,7 @@ public class DetailsLayout extends CoordinatorLayout {
     }
 
     private void setData( Place place ) {
+
         imageViewPlaceDetails.setImageDrawable( ContextCompat
                 .getDrawable( getContext(), getResources()
                         .getIdentifier( place.getPhotoList().get( 0 ), "drawable", getContext().getPackageName() ) ) );
@@ -78,12 +88,11 @@ public class DetailsLayout extends CoordinatorLayout {
             mapIntent.setPackage( "com.google.android.apps.maps" );
 
             // Attempt to start an activity that can handle the Intent
-            if( mapIntent.resolveActivity( getContext().getPackageManager() ) != null ) {
+            if ( mapIntent.resolveActivity( getContext().getPackageManager() ) != null ) {
                 getContext().startActivity( mapIntent );
             }
 
         } );
-
     }
 
     public static DetailsLayout showScene( Activity activity, final ViewGroup container, final View sharedView, final String transitionName, final Place data ) {
@@ -91,6 +100,7 @@ public class DetailsLayout extends CoordinatorLayout {
         DetailsLayout detailsLayout = (DetailsLayout) activity
                 .getLayoutInflater()
                 .inflate( R.layout.item_place, container, false );
+
         detailsLayout.setData( data );
 
         TransitionSet set = new ShowDetailsTransitionSet( activity, transitionName, sharedView, detailsLayout );

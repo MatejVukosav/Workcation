@@ -20,7 +20,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class DetailsFragmentPresenterImpl extends MvpPresenterImpl<DetailsFragmentView> implements DetailsFragmentPresenter {
+public class DetailsFragmentPresenterImpl extends MvpPresenterImpl<DetailsFragmentMvp.View>
+        implements DetailsFragmentMvp.Presenter {
 
     private MapsApiManager mapsApiManager = MapsApiManager.instance();
     private BaliDataProvider baliDataProvider = BaliDataProvider.instance();

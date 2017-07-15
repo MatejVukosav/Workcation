@@ -2,7 +2,7 @@ package com.droidsonroids.workcation.common.mvp;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import butterknife.ButterKnife;
+
 import com.droidsonroids.workcation.common.SuperActivity;
 
 public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter> extends SuperActivity implements MvpView {
@@ -14,7 +14,6 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter> ext
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-        ButterKnife.bind(this);
         if (presenter == null) {
             presenter = createPresenter();
         }
