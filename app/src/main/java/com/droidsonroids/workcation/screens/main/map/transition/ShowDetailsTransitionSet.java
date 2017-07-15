@@ -1,4 +1,4 @@
-package com.droidsonroids.workcation.screens.main.map;
+package com.droidsonroids.workcation.screens.main.map.transition;
 
 import android.content.Context;
 import android.transition.Transition;
@@ -9,16 +9,17 @@ import android.view.View;
 import com.droidsonroids.workcation.R;
 import com.droidsonroids.workcation.common.transitions.TextResizeTransition;
 import com.droidsonroids.workcation.common.transitions.TransitionBuilder;
+import com.droidsonroids.workcation.screens.main.map.DetailsCoordinatorLayout;
 
-class ShowDetailsTransitionSet extends TransitionSet {
+public class ShowDetailsTransitionSet extends TransitionSet {
     private static final String TITLE_TEXT_VIEW_TRANSITION_NAME = "titleTextView";
     private static final String CARD_VIEW_TRANSITION_NAME = "cardView";
     private final String transitionName;
     private final View from;
-    private final DetailsLayout to;
+    private final DetailsCoordinatorLayout to;
     private final Context context;
 
-    ShowDetailsTransitionSet( final Context ctx, final String transitionName, final View from, final DetailsLayout to ) {
+    public ShowDetailsTransitionSet( final Context ctx, final String transitionName, final View from, final DetailsCoordinatorLayout to ) {
         context = ctx;
         this.transitionName = transitionName;
         this.from = from;

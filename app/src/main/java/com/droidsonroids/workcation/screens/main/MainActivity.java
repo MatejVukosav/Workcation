@@ -1,29 +1,23 @@
 package com.droidsonroids.workcation.screens.main;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 
 import com.droidsonroids.workcation.R;
 import com.droidsonroids.workcation.common.maps.MapsUtil;
 import com.droidsonroids.workcation.common.mvp.MvpActivity;
 import com.droidsonroids.workcation.common.mvp.MvpFragment;
 import com.droidsonroids.workcation.databinding.ActivityMainBinding;
-import com.droidsonroids.workcation.screens.main.home.HomeFragment;
 import com.droidsonroids.workcation.screens.main.map.DetailsFragment;
-import com.droidsonroids.workcation.screens.main.map.MySupportMapFragment;
+import com.droidsonroids.workcation.screens.main.map.GoogleSupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import butterknife.OnClick;
-
 public class MainActivity extends MvpActivity<MainView, MainPresenter> implements MainView, OnMapReadyCallback {
 
-    MySupportMapFragment mapFragment;
+    GoogleSupportMapFragment mapFragment;
     private LatLngBounds mapLatLngBounds;
 
     ActivityMainBinding binding;
@@ -35,7 +29,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
         presenter.provideMapLatLngBounds();
 
-        mapFragment = new MySupportMapFragment();
+        mapFragment = new GoogleSupportMapFragment();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace( binding.mapMainFragment.getId(), mapFragment )

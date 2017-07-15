@@ -18,7 +18,7 @@
         <uses-library android:name="com.google.android.maps"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBpNurYQS0skziPHoO2uakaUpqAhdS2hd8"/>
+            android:value="${MAP_API_KEY}"/>
 
         <activity
             android:name=".screens.main.MainActivity"

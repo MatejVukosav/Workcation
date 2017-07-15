@@ -16,12 +16,14 @@ import android.view.ViewGroup;
 import com.droidsonroids.workcation.common.model.Duration;
 import com.droidsonroids.workcation.common.model.Place;
 import com.droidsonroids.workcation.databinding.ItemPlaceBinding;
+import com.droidsonroids.workcation.screens.main.map.transition.HideDetailsTransitionSet;
+import com.droidsonroids.workcation.screens.main.map.transition.ShowDetailsTransitionSet;
 
-public class DetailsLayout extends CoordinatorLayout {
+public class DetailsCoordinatorLayout extends CoordinatorLayout {
 
-    ItemPlaceBinding binding;
+    public ItemPlaceBinding binding;
 
-    public DetailsLayout( final Context context ) {
+    public DetailsCoordinatorLayout( final Context context ) {
         this( context, null );
         init();
     }
@@ -29,7 +31,7 @@ public class DetailsLayout extends CoordinatorLayout {
     private void init() {
     }
 
-    public DetailsLayout( final Context context, final AttributeSet attrs ) {
+    public DetailsCoordinatorLayout( final Context context, final AttributeSet attrs ) {
         super( context, attrs );
         init();
     }

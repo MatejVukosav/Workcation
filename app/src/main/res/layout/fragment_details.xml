@@ -11,7 +11,7 @@
 
         <fragment
             android:id="@+id/mapFragment"
-            class="com.droidsonroids.workcation.screens.main.map.MySupportMapFragment"
+            class="com.droidsonroids.workcation.screens.main.map.GoogleSupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/map_margin_bottom_100"/>

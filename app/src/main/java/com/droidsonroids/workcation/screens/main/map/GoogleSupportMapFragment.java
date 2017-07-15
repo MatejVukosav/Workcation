@@ -20,7 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment;
  * Created by Vuki on 30.6.2017..
  */
 
-public class MySupportMapFragment extends SupportMapFragment implements MapInterface {
+public class GoogleSupportMapFragment extends SupportMapFragment implements MapInterface {
 
     private View originalContentView;
     private TouchableWrapper touchView;

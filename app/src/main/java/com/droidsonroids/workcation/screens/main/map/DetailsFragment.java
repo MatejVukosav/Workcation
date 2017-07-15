@@ -56,8 +56,10 @@ public class DetailsFragment extends
     private List<Place> baliPlaces;
     private BaliPlacesAdapter baliAdapter;
     private String currentTransitionName;
-    private DetailsLayout detailsLayout;
+    private DetailsCoordinatorLayout detailsCoordinatorLayout;
     public boolean isDetailsLayoutHidden = true;
+    private boolean isRecyclerHiden = false;
+    FragmentDetailsBinding binding;
 
     public static Fragment newInstance( final Context ctx ) {
         DetailsFragment fragment = new DetailsFragment();
@@ -68,13 +70,6 @@ public class DetailsFragment extends
         return fragment;
     }
 
-    @Override
-    protected DetailsFragmentMvp.Presenter createPresenter() {
-        return new DetailsFragmentPresenterImpl();
-    }
-
-    FragmentDetailsBinding binding;
-
     @Nullable
     @Override
     public View onCreateView( LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState ) {
@@ -84,11 +79,16 @@ public class DetailsFragment extends
 
     @Override
     public void onBackPressed() {
-        if ( detailsLayout != null ) {
+        if ( detailsCoordinatorLayout != null ) {
             presenter.onBackPressedWithScene();
         } else {
             ( (MainActivity) getActivity() ).superOnBackPressed();
         }
+    }
+
+    @Override
+    protected DetailsFragmentMvp.Presenter createPresenter() {
+        return new DetailsFragmentPresenterImpl();
     }
 
     private View getSharedViewByPosition( final int childPosition ) {
@@ -119,14 +119,12 @@ public class DetailsFragment extends
     }
 
     private void setupMapFragment() {
-        MySupportMapFragment mySupportMapFragment = ( (MySupportMapFragment) getChildFragmentManager()
+        GoogleSupportMapFragment googleSupportMapFragment = ( (GoogleSupportMapFragment) getChildFragmentManager()
                 .findFragmentById( R.id.mapFragment ) );
 
-        mySupportMapFragment.setListener( this );
-        mySupportMapFragment.getMapAsync( this );
+        googleSupportMapFragment.setListener( this );
+        googleSupportMapFragment.getMapAsync( this );
     }
-
-    private boolean isRecyclerHiden = false;
 
     private void translateLowRecycler( View view ) {
         ViewCompat.animate( view )
@@ -169,11 +167,11 @@ public class DetailsFragment extends
     @Override
     public void onPlaceClicked( final View sharedView, final String transitionName, final int position ) {
         currentTransitionName = transitionName;
-        detailsLayout = (DetailsLayout) getActivity()
+        detailsCoordinatorLayout = (DetailsCoordinatorLayout) getActivity()
                 .getLayoutInflater()
                 .inflate( R.layout.item_place, binding.container, false );
 
-        detailsLayout.showScene( binding.container, sharedView, transitionName, baliPlaces.get( position ) );
+        detailsCoordinatorLayout.showScene( binding.container, sharedView, transitionName, baliPlaces.get( position ) );
 
         drawRoute( position );
         hideAllMarkers();
@@ -209,10 +207,10 @@ public class DetailsFragment extends
     @Override
     public void onBackPressedWithScene( final LatLngBounds latLngBounds ) {
         int childPosition = TransitionUtils.getItemPositionFromTransition( currentTransitionName );
-        detailsLayout.hideScene( binding.container, getSharedViewByPosition( childPosition ), currentTransitionName );
+        detailsCoordinatorLayout.hideScene( binding.container, getSharedViewByPosition( childPosition ), currentTransitionName );
         notifyLayoutAfterBackPress( childPosition );
         binding.mapOverlayLayout.onBackPressed( latLngBounds );
-        detailsLayout = null;
+        detailsCoordinatorLayout = null;
         isDetailsLayoutHidden = true;
 
     }
@@ -253,7 +251,7 @@ public class DetailsFragment extends
         Place place = baliPlaces.get( position );
         place.setDistanceFromCurrentLocation( distance );
         place.setDurationFromCurrentLocation( duration );
-        detailsLayout.setDurationText( getActivity(), duration );
+        detailsCoordinatorLayout.setDurationText( getActivity(), duration );
     }
 
     @Override
