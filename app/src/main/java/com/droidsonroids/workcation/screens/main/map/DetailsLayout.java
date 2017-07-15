@@ -6,46 +6,27 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.transition.Scene;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.droidsonroids.workcation.R;
 import com.droidsonroids.workcation.common.model.Duration;
 import com.droidsonroids.workcation.common.model.Place;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.droidsonroids.workcation.databinding.ItemPlaceBinding;
 
 public class DetailsLayout extends CoordinatorLayout {
 
-    @BindView(R.id.cardview)
-    CardView cardViewContainer;
-    @BindView(R.id.headerImage)
-    ImageView imageViewPlaceDetails;
-    @BindView(R.id.title)
-    TextView textViewTitle;
-    @BindView(R.id.description)
-    TextView textViewDescription;
-    @BindView(R.id.price_title)
-    TextView price;
-    @BindView(R.id.hours)
-    TextView hours;
-    @BindView(R.id.time)
-    TextView time;
-    @BindView(R.id.takeMe)
-    Button takeMeBtn;
+    ItemPlaceBinding binding;
 
     public DetailsLayout( final Context context ) {
         this( context, null );
         init();
+    }
+
+    private void init() {
     }
 
     public DetailsLayout( final Context context, final AttributeSet attrs ) {
@@ -53,33 +34,22 @@ public class DetailsLayout extends CoordinatorLayout {
         init();
     }
 
-    private void init() {
-//        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-//        inflater.inflate( R.layout.item_place, this );
-//
-//        ViewDataBinding binding = DataBindingUtil.inflate( inflater,
-//                R.layout.item_place, this, true );
-
-    }
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.bind( this );
+        binding = ItemPlaceBinding.bind( this );
     }
 
     private void setData( Place place ) {
-
-        imageViewPlaceDetails.setImageDrawable( ContextCompat
+        binding.headerImage.setImageDrawable( ContextCompat
                 .getDrawable( getContext(), getResources()
                         .getIdentifier( place.getPhotoList().get( 0 ), "drawable", getContext().getPackageName() ) ) );
-        textViewTitle.setText( place.getName() );
-        textViewDescription.setText( place.getDescription() );
-        hours.setText( place.getOpeningHours() );
-        price.setText( String.valueOf( place.getPrice() ) );
+        binding.title.setText( place.getName() );
+        binding.description.setText( place.getDescription() );
+        binding.hours.setText( place.getOpeningHours() );
+        binding.priceTitle.setText( String.valueOf( place.getPrice() ) );
 
-        takeMeBtn.setOnClickListener( v -> {
-
+        binding.takeMe.setOnClickListener( v -> {
             // Create a Uri from an intent string. Use the result to create an Intent.
             Uri gmmIntentUri = Uri.parse( "google.navigation:q=" + place.getLat() + "," + place.getLng() + "" );
             // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
@@ -95,31 +65,20 @@ public class DetailsLayout extends CoordinatorLayout {
         } );
     }
 
-    public static DetailsLayout showScene( Activity activity, final ViewGroup container, final View sharedView, final String transitionName, final Place data ) {
-
-        DetailsLayout detailsLayout = (DetailsLayout) activity
-                .getLayoutInflater()
-                .inflate( R.layout.item_place, container, false );
-
-        detailsLayout.setData( data );
-
-        TransitionSet set = new ShowDetailsTransitionSet( activity, transitionName, sharedView, detailsLayout );
-        Scene scene = new Scene( container, (View) detailsLayout );
+    public void showScene( final ViewGroup container, final View sharedView, final String transitionName, final Place data ) {
+        setData( data );
+        TransitionSet set = new ShowDetailsTransitionSet( getContext(), transitionName, sharedView, this );
+        Scene scene = new Scene( container, (View) this );
         TransitionManager.go( scene, set );
-
-        return detailsLayout;
     }
 
-    public static DetailsLayout hideScene( Activity activity, final ViewGroup container, final View sharedView, final String transitionName ) {
-        DetailsLayout detailsLayout = (DetailsLayout) container.findViewById( R.id.bali_details_container );
-        TransitionSet set = new HideDetailsTransitionSet( activity, transitionName, sharedView, detailsLayout );
-        Scene scene = new Scene( container, (View) detailsLayout );
+    public void hideScene( final ViewGroup container, final View sharedView, final String transitionName ) {
+        TransitionSet set = new HideDetailsTransitionSet( getContext(), transitionName, sharedView, this );
+        Scene scene = new Scene( container, (View) this );
         TransitionManager.go( scene, set );
-        return detailsLayout;
     }
 
-    public static void setDurationText( Activity activity, final ViewGroup container, Duration duration ) {
-        DetailsLayout detailsLayout = (DetailsLayout) container.findViewById( R.id.bali_details_container );
-        activity.runOnUiThread( () -> detailsLayout.time.setText( duration.getText() ) );
+    public void setDurationText( Activity activity, Duration duration ) {
+        activity.runOnUiThread( () -> binding.time.setText( duration.getText() ) );
     }
 }

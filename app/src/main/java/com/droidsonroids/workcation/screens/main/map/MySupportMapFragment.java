@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.droidsonroids.workcation.common.views.ViewHelper;
 import com.google.android.gms.maps.SupportMapFragment;
 
 /**
@@ -21,29 +22,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 public class MySupportMapFragment extends SupportMapFragment implements MapInterface {
 
-    public View originalContentView;
-    public TouchableWrapper touchView;
-    public MapInterface listener;
+    private View originalContentView;
+    private TouchableWrapper touchView;
+    private MapInterface listener;
 
-    public void setListener( MapInterface listener ) {
-        this.listener = listener;
-    }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         originalContentView = super.onCreateView( inflater, container, savedInstanceState );
-//        if ( originalContentView != null ) {
-//            ViewGroup parent = (ViewGroup) originalContentView.getParent();
-//            if ( parent != null ) {
-//                parent.removeView( originalContentView );
-//            }
-//        }
-//
-//        try {
-//        } catch ( InflateException e ) {
-//
-//        }
-
         touchView = new TouchableWrapper( getActivity(), this );
         touchView.addView( originalContentView );
         return touchView;
@@ -55,11 +41,16 @@ public class MySupportMapFragment extends SupportMapFragment implements MapInter
             listener.onMapClicked();
         }
     }
+    public void setListener( MapInterface listener ) {
+        this.listener = listener;
+    }
 
     @Override
     public View getView() {
         return originalContentView;
     }
+
+
 
     public static class TouchableWrapper extends FrameLayout {
 
@@ -70,19 +61,20 @@ public class MySupportMapFragment extends SupportMapFragment implements MapInter
             this.listener = listener;
         }
 
-        public TouchableWrapper( @NonNull Context context, @Nullable AttributeSet attrs, MapInterface listener ) {
+        public TouchableWrapper( @NonNull Context context ) {
+            super( context );
+        }
+
+        public TouchableWrapper( @NonNull Context context, @Nullable AttributeSet attrs ) {
             super( context, attrs );
-            this.listener = listener;
         }
 
-        public TouchableWrapper( @NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, MapInterface listener ) {
+        public TouchableWrapper( @NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr ) {
             super( context, attrs, defStyleAttr );
-            this.listener = listener;
         }
 
-        public TouchableWrapper( @NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes, MapInterface listener ) {
+        public TouchableWrapper( @NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes ) {
             super( context, attrs, defStyleAttr, defStyleRes );
-            this.listener = listener;
         }
 
         @Override
@@ -109,11 +101,9 @@ public class MySupportMapFragment extends SupportMapFragment implements MapInter
                         if ( listener != null ) {
                             listener.onMapClicked();
                         }
-
                     }
                 }
             }
-
             return super.dispatchTouchEvent( event );
         }
 
@@ -132,15 +122,11 @@ public class MySupportMapFragment extends SupportMapFragment implements MapInter
         private float pressedY;
         private boolean stayedWithinClickDistance;
 
-        private float distance( float x1, float y1, float x2, float y2 ) {
+        public float distance( float x1, float y1, float x2, float y2 ) {
             float dx = x1 - x2;
             float dy = y1 - y2;
             float distanceInPx = (float) Math.sqrt( dx * dx + dy * dy );
-            return pxToDp( distanceInPx );
-        }
-
-        private float pxToDp( float px ) {
-            return px / getResources().getDisplayMetrics().density;
+            return ViewHelper.pxToDp( distanceInPx, getResources() );
         }
 
     }

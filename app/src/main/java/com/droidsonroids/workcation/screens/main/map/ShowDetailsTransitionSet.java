@@ -38,22 +38,22 @@ class ShowDetailsTransitionSet extends TransitionSet {
 
     private Transition textResize() {
         return new TransitionBuilder( new TextResizeTransition() )
-                .link( from.findViewById( R.id.title ), to.textViewTitle, titleTransitionName() )
+                .link( from.findViewById( R.id.title ), to.binding.title, titleTransitionName() )
                 .build();
     }
 
     private Transition slide() {
         return new TransitionBuilder( TransitionInflater.from( context ).inflateTransition( R.transition.bali_details_enter_transition ) )
                 .excludeTarget( transitionName, true )
-                .excludeTarget( to.textViewTitle, true )
-                .excludeTarget( to.cardViewContainer, true )
+                .excludeTarget( to.binding.title, true )
+                .excludeTarget( to.binding.baliDetailsContainer, true )
                 .build();
     }
 
     private Transition shared() {
         return new TransitionBuilder( TransitionInflater.from( context ).inflateTransition( android.R.transition.move ) )
-                .link( from.findViewById( R.id.headerImage ), to.imageViewPlaceDetails, transitionName )
-                .link( from, to.cardViewContainer, cardViewTransitionName() )
+                .link( from.findViewById( R.id.headerImage ), to.binding.headerImage, transitionName )
+                .link( from, to.binding.baliDetailsContainer, cardViewTransitionName() )
                 .build();
     }
 }

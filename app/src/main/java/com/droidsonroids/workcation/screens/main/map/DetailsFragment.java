@@ -169,17 +169,16 @@ public class DetailsFragment extends
     @Override
     public void onPlaceClicked( final View sharedView, final String transitionName, final int position ) {
         currentTransitionName = transitionName;
-        //detailsLayout = new DetailsLayout( getActivity() );
+        detailsLayout = (DetailsLayout) getActivity()
+                .getLayoutInflater()
+                .inflate( R.layout.item_place, binding.container, false );
 
-        detailsLayout = DetailsLayout
-                .showScene( getActivity(), binding.container, sharedView, transitionName, baliPlaces.get( position ) );
+        detailsLayout.showScene( binding.container, sharedView, transitionName, baliPlaces.get( position ) );
 
         drawRoute( position );
         hideAllMarkers();
         isDetailsLayoutHidden = false;
     }
-
-
 
     private void drawRoute( final int position ) {
         if ( ActivityCompat.checkSelfPermission( getContext(), Manifest.permission.ACCESS_FINE_LOCATION )
@@ -210,8 +209,7 @@ public class DetailsFragment extends
     @Override
     public void onBackPressedWithScene( final LatLngBounds latLngBounds ) {
         int childPosition = TransitionUtils.getItemPositionFromTransition( currentTransitionName );
-        DetailsLayout
-                .hideScene( getActivity(), binding.container, getSharedViewByPosition( childPosition ), currentTransitionName );
+        detailsLayout.hideScene( binding.container, getSharedViewByPosition( childPosition ), currentTransitionName );
         notifyLayoutAfterBackPress( childPosition );
         binding.mapOverlayLayout.onBackPressed( latLngBounds );
         detailsLayout = null;
@@ -255,7 +253,7 @@ public class DetailsFragment extends
         Place place = baliPlaces.get( position );
         place.setDistanceFromCurrentLocation( distance );
         place.setDurationFromCurrentLocation( duration );
-        DetailsLayout.setDurationText( getActivity(), binding.container, duration );
+        detailsLayout.setDurationText( getActivity(), duration );
     }
 
     @Override

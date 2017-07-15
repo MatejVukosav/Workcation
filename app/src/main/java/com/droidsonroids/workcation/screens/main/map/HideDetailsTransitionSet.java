@@ -5,6 +5,7 @@ import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.transition.TransitionSet;
 import android.view.View;
+
 import com.droidsonroids.workcation.R;
 import com.droidsonroids.workcation.common.transitions.TextResizeTransition;
 import com.droidsonroids.workcation.common.transitions.TransitionBuilder;
@@ -17,13 +18,13 @@ class HideDetailsTransitionSet extends TransitionSet {
     private final DetailsLayout to;
     private final Context context;
 
-    HideDetailsTransitionSet(final Context ctx, final String transitionName, final View from, final DetailsLayout to) {
+    HideDetailsTransitionSet( final Context ctx, final String transitionName, final View from, final DetailsLayout to ) {
         context = ctx;
         this.transitionName = transitionName;
         this.from = from;
         this.to = to;
-        addTransition(textResize());
-        addTransition(shared());
+        addTransition( textResize() );
+        addTransition( shared() );
     }
 
     private String titleTransitionName() {
@@ -35,15 +36,15 @@ class HideDetailsTransitionSet extends TransitionSet {
     }
 
     private Transition textResize() {
-        return new TransitionBuilder(new TextResizeTransition())
-                .link(from.findViewById(R.id.title), to.textViewTitle, titleTransitionName())
+        return new TransitionBuilder( new TextResizeTransition() )
+                .link( from.findViewById( R.id.title ), to.binding.title, titleTransitionName() )
                 .build();
     }
 
     private Transition shared() {
-        return new TransitionBuilder(TransitionInflater.from(context).inflateTransition(android.R.transition.move))
-                .link(from.findViewById(R.id.headerImage), to.imageViewPlaceDetails, transitionName)
-                .link(from, to.cardViewContainer, cardViewTransitionName())
+        return new TransitionBuilder( TransitionInflater.from( context ).inflateTransition( android.R.transition.move ) )
+                .link( from.findViewById( R.id.headerImage ), to.binding.headerImage, transitionName )
+                .link( from, to.binding.baliDetailsContainer, cardViewTransitionName() )
                 .build();
     }
 }

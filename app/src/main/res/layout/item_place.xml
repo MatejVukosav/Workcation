@@ -3,10 +3,6 @@
         xmlns:tools="http://schemas.android.com/tools"
     >
 
-    <data>
-
-    </data>
-
     <com.droidsonroids.workcation.screens.main.map.DetailsLayout
         android:id="@+id/bali_details_container"
         android:layout_width="match_parent"
