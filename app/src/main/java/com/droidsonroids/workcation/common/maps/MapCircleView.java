@@ -18,7 +18,7 @@ import com.droidsonroids.workcation.R;
  * Created by Vuki on 29.6.2017..
  */
 
-public class CircleView extends View {
+public class MapCircleView extends View {
 
     private static final int STROKE_DIMEN = 3;
     private static final int STROKE_COLOR = android.R.color.black;
@@ -33,26 +33,26 @@ public class CircleView extends View {
     private Animation animationScaleLarge;
     private Animation animationScaleSmall;
 
-    public CircleView( Context context ) {
+    public MapCircleView( Context context ) {
         super( context );
         this.context = context;
         init();
     }
 
-    public CircleView( Context context, @Nullable AttributeSet attrs ) {
+    public MapCircleView( Context context, @Nullable AttributeSet attrs ) {
         super( context, attrs );
         this.context = context;
         init();
     }
 
-    public CircleView( Context context, @Nullable AttributeSet attrs, int defStyleAttr ) {
+    public MapCircleView( Context context, @Nullable AttributeSet attrs, int defStyleAttr ) {
         super( context, attrs, defStyleAttr );
         this.context = context;
         init();
     }
 
     @SuppressWarnings("unused")
-    public CircleView( Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes ) {
+    public MapCircleView( Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes ) {
         super( context, attrs, defStyleAttr, defStyleRes );
         this.context = context;
         init();
@@ -67,20 +67,20 @@ public class CircleView extends View {
 
     @Override
     protected void onMeasure( int widthMeasureSpec, int heightMeasureSpec ) {
+        super.onMeasure( widthMeasureSpec, heightMeasureSpec );
         int parentWidth = MeasureSpec.getSize( widthMeasureSpec );
         int parentHeight = MeasureSpec.getSize( heightMeasureSpec );
         this.setMeasuredDimension( parentWidth, parentHeight );
-        super.onMeasure( widthMeasureSpec, heightMeasureSpec );
 
         size = parentHeight / 2;
     }
 
     @Override
     protected void onDraw( Canvas canvas ) {
+        super.onDraw( canvas );
         drawBackground( canvas );
         drawStrokeBackground( canvas );
         drawText( canvas );
-        super.onDraw( canvas );
     }
 
     private void drawText( Canvas canvas ) {
@@ -131,7 +131,7 @@ public class CircleView extends View {
     }
 
     @SuppressWarnings("unused")
-    public void strech() {
+    public void stretch() {
         startAnimation( animationScaleLarge );
     }
 

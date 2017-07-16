@@ -41,32 +41,29 @@ import java.util.List;
  * To make: - button to center user view as beginning.
  * - user location on map
  */
-public class DetailsFragment extends
-        MvpFragment<DetailsFragmentMvp.View,
-                DetailsFragmentMvp.Presenter>
+public class DetailsFragment extends MvpFragment<DetailsFragmentMvp.View, DetailsFragmentMvp.Presenter>
         implements DetailsFragmentMvp.View,
         OnMapReadyCallback,
-        BaliPlacesAdapter.OnPlaceClickListener,
+        PlacesAdapter.OnPlaceClickListener,
         HorizontalRecyclerViewScrollListener.OnItemCoverListener,
         PulseOverlayLayout.OnClick,
         MapInterface {
 
-    public static final String TAG = DetailsFragment.class.getSimpleName();
+    public static final String TAG = DetailsFragment.class.getCanonicalName();
 
-    private List<Place> baliPlaces;
-    private BaliPlacesAdapter baliAdapter;
+    private static final String MAP_TRANSITION_PLACEHOLDER = "mapPlaceholderTransition";
+
+    private List<Place> places;
+    private PlacesAdapter placesAdapter;
     private String currentTransitionName;
-    private DetailsCoordinatorLayout detailsCoordinatorLayout;
     public boolean isDetailsLayoutHidden = true;
-    private boolean isRecyclerHiden = false;
-    FragmentDetailsBinding binding;
+    private boolean isRecyclerHidden = false;
+    private DetailsCoordinatorLayout detailsCoordinatorLayout;
+    private FragmentDetailsBinding binding;
 
-    public static Fragment newInstance( final Context ctx ) {
+    public static Fragment newInstance( final Context context ) {
         DetailsFragment fragment = new DetailsFragment();
-        ScaleDownImageTransition transition = new ScaleDownImageTransition( ctx, MapBitmapCache.instance().getBitmap() );
-        transition.addTarget( ctx.getString( R.string.mapPlaceholderTransition ) );
-        transition.setDuration( 600 );
-        fragment.setEnterTransition( transition );
+        fragment.setEnterTransition( fragment.getScaleDownImageTransition( context ) );
         return fragment;
     }
 
@@ -143,7 +140,7 @@ public class DetailsFragment extends
     private void setupRecyclerView() {
         binding.recyclerView.setLayoutManager(
                 new LinearLayoutManager( getContext(), LinearLayoutManager.HORIZONTAL, false ) );
-        baliAdapter = new BaliPlacesAdapter( this, getActivity() );
+        placesAdapter = new PlacesAdapter( this, getActivity() );
     }
 
     @Override
@@ -159,8 +156,8 @@ public class DetailsFragment extends
 
     private void addDataToRecyclerView() {
         binding.recyclerView.setItemAnimator( new TranslateItemAnimator() );
-        binding.recyclerView.setAdapter( baliAdapter );
-        baliAdapter.setPlacesList( baliPlaces );
+        binding.recyclerView.setAdapter( placesAdapter );
+        placesAdapter.setPlacesList( places );
         binding.recyclerView.addOnScrollListener( new HorizontalRecyclerViewScrollListener( this ) );
     }
 
@@ -171,7 +168,7 @@ public class DetailsFragment extends
                 .getLayoutInflater()
                 .inflate( R.layout.item_place, binding.container, false );
 
-        detailsCoordinatorLayout.showScene( binding.container, sharedView, transitionName, baliPlaces.get( position ) );
+        detailsCoordinatorLayout.showScene( binding.container, sharedView, transitionName, places.get( position ) );
 
         drawRoute( position );
         hideAllMarkers();
@@ -201,33 +198,33 @@ public class DetailsFragment extends
 
     @Override
     public void provideBaliData( final List<Place> places ) {
-        baliPlaces = places;
+        this.places = places;
     }
 
     @Override
     public void onBackPressedWithScene( final LatLngBounds latLngBounds ) {
         int childPosition = TransitionUtils.getItemPositionFromTransition( currentTransitionName );
-        detailsCoordinatorLayout.hideScene( binding.container, getSharedViewByPosition( childPosition ), currentTransitionName );
+        detailsCoordinatorLayout
+                .hideScene( binding.container, getSharedViewByPosition( childPosition ), currentTransitionName );
         notifyLayoutAfterBackPress( childPosition );
         binding.mapOverlayLayout.onBackPressed( latLngBounds );
         detailsCoordinatorLayout = null;
         isDetailsLayoutHidden = true;
-
     }
 
     private void notifyLayoutAfterBackPress( final int childPosition ) {
         binding.container.removeAllViews();
         binding.container.addView( binding.recyclerView );
         binding.recyclerView.requestLayout();
-        baliAdapter.notifyItemChanged( childPosition );
+        placesAdapter.notifyItemChanged( childPosition );
     }
 
     @Override
     public void moveMapAndAddMaker( final LatLngBounds latLngBounds ) {
         binding.mapOverlayLayout.moveCamera( latLngBounds );
         binding.mapOverlayLayout.setOnCameraIdleListener( () -> {
-            for ( int i = 0; i < baliPlaces.size(); i++ ) {
-                binding.mapOverlayLayout.createAndShowMarker( this, i, baliPlaces.get( i ).getLatLng() );
+            for ( int i = 0; i < places.size(); i++ ) {
+                binding.mapOverlayLayout.createAndShowMarker( this, i, places.get( i ).getLatLng() );
             }
             binding.mapOverlayLayout.setOnCameraIdleListener( null );
         } );
@@ -248,10 +245,12 @@ public class DetailsFragment extends
 
     @Override
     public void updateData( int position, Distance distance, Duration duration ) {
-        Place place = baliPlaces.get( position );
+        Place place = places.get( position );
         place.setDistanceFromCurrentLocation( distance );
         place.setDurationFromCurrentLocation( duration );
-        detailsCoordinatorLayout.setDurationText( getActivity(), duration );
+        if ( detailsCoordinatorLayout != null ) {
+            detailsCoordinatorLayout.setDurationText( getActivity(), duration );
+        }
     }
 
     @Override
@@ -263,9 +262,8 @@ public class DetailsFragment extends
     public void onNumberClicked( int position ) {
         binding.mapOverlayLayout.showMarker( position );
 
-        LatLng latLng = baliPlaces.get( position ).getLatLng();
+        LatLng latLng = places.get( position ).getLatLng();
         getActivity().runOnUiThread( () -> binding.mapOverlayLayout.animateCamera( latLng ) );
-
     }
 
     @Override
@@ -279,14 +277,23 @@ public class DetailsFragment extends
         if ( !isDetailsLayoutHidden ) {
             presenter.onBackPressedWithScene();
         } else {
-            if ( isRecyclerHiden ) {
+            if ( isRecyclerHidden ) {
                 translateNormalRecycler( binding.recyclerView );
-                isRecyclerHiden = false;
+                isRecyclerHidden = false;
             } else {
                 translateLowRecycler( binding.recyclerView );
-                isRecyclerHiden = true;
+                isRecyclerHidden = true;
 
             }
         }
     }
+
+    private ScaleDownImageTransition getScaleDownImageTransition( Context context ) {
+        ScaleDownImageTransition transition =
+                new ScaleDownImageTransition( context, MapBitmapCache.instance().getBitmap() );
+        transition.addTarget( MAP_TRANSITION_PLACEHOLDER );
+        transition.setDuration( 600 );
+        return transition;
+    }
+
 }

@@ -4,5 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Step {
 
-    @SerializedName("polyline") Polyline polyline;
+    @SerializedName("polyline")
+    Polyline polyline;
 }

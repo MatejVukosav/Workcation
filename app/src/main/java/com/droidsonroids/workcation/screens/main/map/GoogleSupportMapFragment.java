@@ -14,13 +14,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.droidsonroids.workcation.common.views.ViewHelper;
-import com.google.android.gms.maps.SupportMapFragment;
 
 /**
  * Created by Vuki on 30.6.2017..
  */
 
-public class GoogleSupportMapFragment extends SupportMapFragment implements MapInterface {
+public class GoogleSupportMapFragment extends com.google.android.gms.maps.SupportMapFragment implements MapInterface {
 
     private View originalContentView;
     private TouchableWrapper touchView;

@@ -2,9 +2,8 @@ package com.droidsonroids.workcation.common;
 
 import android.app.Application;
 import com.droidsonroids.workcation.R;
-import com.droidsonroids.workcation.common.maps.MapBitmapCache;
-import com.droidsonroids.workcation.common.model.BaliDataProvider;
-import com.droidsonroids.workcation.common.model.MapsApiManager;
+import com.droidsonroids.workcation.common.data.providers.MapDataProvider;
+import com.droidsonroids.workcation.common.data.providers.MapsApiManager;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class WorkcationApp extends Application {
@@ -16,7 +15,7 @@ public class WorkcationApp extends Application {
         super.onCreate();
         sInstance = this;
         MapsApiManager.instance().initialize();
-        BaliDataProvider.instance().initialize();
+        MapDataProvider.instance().initialize();
         initCalligraphy();
     }
 

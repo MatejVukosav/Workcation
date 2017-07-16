@@ -10,9 +10,9 @@ import java.io.Serializable;
 
 public class Distance implements Serializable {
 
-    @SerializedName( "value" )
+    @SerializedName("value")
     int value;
 
-    @SerializedName( "text" )
+    @SerializedName("text")
     String text;
 }

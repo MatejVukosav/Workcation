@@ -6,17 +6,19 @@ import com.google.gson.annotations.SerializedName;
  * Created by droids on 28.11.2016.
  */
 
-public class Northeast {
+public final class Northeast {
 
-    @SerializedName("lat") String lat;
-    @SerializedName("lng") String lng;
+    @SerializedName("lat")
+    String lat;
+    @SerializedName("lng")
+    String lng;
 
     public String getLat() {
         return lat;
     }
 
     public Double getLatD() {
-        return Double.parseDouble(lat);
+        return Double.parseDouble( lat );
     }
 
     public String getLng() {

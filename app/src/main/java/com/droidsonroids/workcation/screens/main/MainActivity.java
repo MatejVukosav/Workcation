@@ -2,6 +2,7 @@ package com.droidsonroids.workcation.screens.main;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.droidsonroids.workcation.R;
 import com.droidsonroids.workcation.common.maps.MapsUtil;
@@ -13,38 +14,32 @@ import com.droidsonroids.workcation.screens.main.map.GoogleSupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-public class MainActivity extends MvpActivity<MainView, MainPresenter> implements MainView, OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements MainView, OnMapReadyCallback {
 
-    GoogleSupportMapFragment mapFragment;
     private LatLngBounds mapLatLngBounds;
 
-    ActivityMainBinding binding;
+    private MainPresenter presenter;
+    private ActivityMainBinding binding;
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         binding = DataBindingUtil.setContentView( this, R.layout.activity_main );
 
+        presenter = new MainPresenterImpl();
+        presenter.attachView( this );
         presenter.provideMapLatLngBounds();
 
-        mapFragment = new GoogleSupportMapFragment();
+        GoogleSupportMapFragment mapFragment = new GoogleSupportMapFragment();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace( binding.mapMainFragment.getId(), mapFragment )
+                .addToBackStack( DetailsFragment.TAG )
                 .commit();
         mapFragment.getMapAsync( this );
-    }
-
-    @Override
-    protected MainPresenter createPresenter() {
-        return new MainPresenterImpl();
-    }
-
-    @Override
-    protected int getLayout() {
-        return R.layout.activity_main;
     }
 
     @Override
@@ -67,22 +62,23 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 mapLatLngBounds,
                 MapsUtil.calculateWidth( getWindowManager() ),
                 MapsUtil.calculateHeight( getWindowManager(), getResources().getDimensionPixelSize( R.dimen.map_margin_bottom ) ), 150 ) );
+        //save bitmap for later reuse (cause flash while creating map)
         // googleMap.setOnMapLoadedCallback( () -> googleMap.snapshot( presenter::saveBitmap ) );
 
         //TODO permission
         googleMap.setMyLocationEnabled( true );
 
-        googleMap.getUiSettings().setMyLocationButtonEnabled( true );
-        googleMap.getUiSettings().setCompassEnabled( true );
-
-        googleMap.getUiSettings().setMapToolbarEnabled( true );
-        googleMap.getUiSettings().setAllGesturesEnabled( true );
+        UiSettings uiSettings = googleMap.getUiSettings();
+        uiSettings.setMyLocationButtonEnabled( true );
+        uiSettings.setCompassEnabled( true );
+        uiSettings.setMapToolbarEnabled( true );
+        uiSettings.setAllGesturesEnabled( true );
 
         if ( getSupportFragmentManager().findFragmentByTag( DetailsFragment.TAG ) == null ) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations( android.R.anim.slide_in_left, android.R.anim.slide_out_right )
-                    .replace( R.id.container_main, DetailsFragment.newInstance( this ), DetailsFragment.TAG )
+                    .replace( binding.containerMain.getId(), DetailsFragment.newInstance( this ), DetailsFragment.TAG )
                     .addToBackStack( DetailsFragment.TAG )
                     .commit();
         }

@@ -8,8 +8,8 @@ import com.droidsonroids.workcation.common.model.Bounds;
 public class MapsUtil {
     public static final String MAP_BITMAP_KEY = "map_bitmap_key";
     public static final int DEFAULT_ZOOM = 150;
-    private static final double LATITUDE_INCREASE_FACTOR =2;
-    public static int DEFAULT_MAP_PADDING = 16;
+    private static final double LATITUDE_INCREASE_FACTOR = 2;
+    public static final int DEFAULT_MAP_PADDING = 16;
 
     public static String increaseLatitude( final Bounds bounds ) {
         double southwestLat = bounds.getSouthwest().getLatD();

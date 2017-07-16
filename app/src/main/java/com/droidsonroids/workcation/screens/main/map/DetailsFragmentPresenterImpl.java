@@ -1,12 +1,12 @@
 package com.droidsonroids.workcation.screens.main.map;
 
 import com.droidsonroids.workcation.common.maps.MapsUtil;
-import com.droidsonroids.workcation.common.model.BaliDataProvider;
+import com.droidsonroids.workcation.common.data.providers.MapDataProvider;
 import com.droidsonroids.workcation.common.model.Bounds;
 import com.droidsonroids.workcation.common.model.DirectionsResponse;
 import com.droidsonroids.workcation.common.model.Distance;
 import com.droidsonroids.workcation.common.model.Duration;
-import com.droidsonroids.workcation.common.model.MapsApiManager;
+import com.droidsonroids.workcation.common.data.providers.MapsApiManager;
 import com.droidsonroids.workcation.common.model.Route;
 import com.droidsonroids.workcation.common.mvp.MvpPresenterImpl;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,12 +24,12 @@ public class DetailsFragmentPresenterImpl extends MvpPresenterImpl<DetailsFragme
         implements DetailsFragmentMvp.Presenter {
 
     private MapsApiManager mapsApiManager = MapsApiManager.instance();
-    private BaliDataProvider baliDataProvider = BaliDataProvider.instance();
+    private MapDataProvider mapDataProvider = MapDataProvider.instance();
 
     @Override
     public void drawRoute( final LatLng first, final int position ) {
 
-        final LatLng second = new LatLng( baliDataProvider.getLatByPosition( position ), baliDataProvider.getLngByPosition( position ) );
+        final LatLng second = new LatLng( mapDataProvider.getLatByPosition( position ), mapDataProvider.getLngByPosition( position ) );
 
         mapsApiManager.getRoute( first, second, new Callback() {
             @Override
@@ -53,17 +53,17 @@ public class DetailsFragmentPresenterImpl extends MvpPresenterImpl<DetailsFragme
 
     @Override
     public void provideBaliData() {
-        getView().provideBaliData( baliDataProvider.providePlacesList() );
+        getView().provideBaliData( mapDataProvider.providePlacesList() );
     }
 
     @Override
     public void onBackPressedWithScene() {
-        getView().onBackPressedWithScene( baliDataProvider.provideLatLngBoundsForAllPlaces() );
+        getView().onBackPressedWithScene( mapDataProvider.provideLatLngBoundsForAllPlaces() );
     }
 
     @Override
     public void moveMapAndAddMarker() {
-        getView().moveMapAndAddMaker( baliDataProvider.provideLatLngBoundsForAllPlaces() );
+        getView().moveMapAndAddMaker( mapDataProvider.provideLatLngBoundsForAllPlaces() );
     }
 
     private void updateMapZoomAndRegion( final Bounds bounds ) {

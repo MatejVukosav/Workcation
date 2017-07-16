@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Place {
     @SerializedName("name")
     private String name;
@@ -19,7 +20,7 @@ public class Place {
     @SerializedName("lng")
     private double lng;
     @SerializedName("photo")
-    List<String> photo;
+    private List<String> photo;
 
     private Duration durationFromCurrentLocation;
     private Distance distanceFromCurrentLocation;
@@ -36,48 +37,24 @@ public class Place {
         return openingHours;
     }
 
-    public void setOpeningHours( final String openingHours ) {
-        this.openingHours = openingHours;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice( final int price ) {
-        this.price = price;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription( final String description ) {
-        this.description = description;
-    }
-
     public double getLat() {
         return lat;
-    }
-
-    public void setLat( final double lat ) {
-        this.lat = lat;
     }
 
     public double getLng() {
         return lng;
     }
 
-    public void setLng( final double lng ) {
-        this.lng = lng;
-    }
-
     public List<String> getPhotoList() {
         return photo;
-    }
-
-    public void setPhotoList( final List<String> photo ) {
-        this.photo = photo;
     }
 
     public LatLng getLatLng() {

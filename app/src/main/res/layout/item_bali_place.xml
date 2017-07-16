@@ -11,7 +11,7 @@
     android:layout_marginRight="@dimen/default_layout_margin_halved"
     android:background="@color/transparent">
 
-    <com.droidsonroids.workcation.common.maps.CircleView
+    <com.droidsonroids.workcation.common.maps.MapCircleView
         android:id="@+id/number"
         android:layout_width="24dp"
         android:layout_height="24dp"

@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.droidsonroids.workcation.R;
-import com.droidsonroids.workcation.common.maps.CircleView;
+import com.droidsonroids.workcation.common.maps.MapCircleView;
 import com.droidsonroids.workcation.common.model.Place;
 import com.droidsonroids.workcation.common.transitions.TransitionUtils;
 
@@ -26,13 +26,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class BaliPlacesAdapter extends RecyclerView.Adapter<BaliPlacesAdapter.BaliViewHolder> {
+class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.BaliViewHolder> {
 
     private final OnPlaceClickListener listener;
     private Context context;
     private List<Place> placeList = new ArrayList<>();
 
-    BaliPlacesAdapter( OnPlaceClickListener listener, Context context ) {
+    PlacesAdapter( OnPlaceClickListener listener, Context context ) {
         this.listener = listener;
         this.context = context;
     }
@@ -110,7 +110,7 @@ class BaliPlacesAdapter extends RecyclerView.Adapter<BaliPlacesAdapter.BaliViewH
         @BindView(R.id.headerImage)
         ImageView placePhoto;
         @BindView(R.id.number)
-        CircleView number;
+        MapCircleView number;
 
         BaliViewHolder( final View itemView ) {
             super( itemView );

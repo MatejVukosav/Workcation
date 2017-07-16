@@ -6,10 +6,12 @@ import com.google.gson.annotations.SerializedName;
  * Created by droids on 28.11.2016.
  */
 
-public class Southwest {
+public final class Southwest {
 
-    @SerializedName("lat") String lat;
-    @SerializedName("lng") String lng;
+    @SerializedName("lat")
+    String lat;
+    @SerializedName("lng")
+    String lng;
 
     public String getLat() {
         return lat;
@@ -20,10 +22,10 @@ public class Southwest {
     }
 
     public Double getLatD() {
-        return Double.parseDouble(lat);
+        return Double.parseDouble( lat );
     }
 
-    public void setLat(final String lat) {
+    public void setLat( final String lat ) {
         this.lat = lat;
     }
 }

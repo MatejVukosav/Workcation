@@ -164,7 +164,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:padding="@dimen/default_layout_margin_halved"
-                                android:text="@string/trip_starts_in_2_days"
+                                android:text="TRIP STARTS IN 2 DAYS"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/textsize_very_small"
                                 android:textStyle="bold"/>

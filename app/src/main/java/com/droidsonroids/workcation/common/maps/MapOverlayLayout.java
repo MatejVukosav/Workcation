@@ -11,7 +11,6 @@ import android.support.annotation.RequiresPermission;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
@@ -56,13 +55,13 @@ public class MapOverlayLayout extends FrameLayout {
     }
 
     public void showAllMarkers() {
-        for( int i = 0; i < markersList.size(); i++ ) {
+        for ( int i = 0; i < markersList.size(); i++ ) {
             markersList.get( i ).show();
         }
     }
 
     public void hideAllMarkers() {
-        for( int i = 0; i < markersList.size(); i++ ) {
+        for ( int i = 0; i < markersList.size(); i++ ) {
             markersList.get( i ).hide();
         }
     }
@@ -81,7 +80,7 @@ public class MapOverlayLayout extends FrameLayout {
 
     public void refresh() {
         Projection projection = googleMap.getProjection();
-        for( int i = 0; i < markersList.size(); i++ ) {
+        for ( int i = 0; i < markersList.size(); i++ ) {
             refresh( i, projection.toScreenLocation( markersList.get( i ).latLng() ) );
         }
     }
@@ -102,8 +101,7 @@ public class MapOverlayLayout extends FrameLayout {
         int width = getWidth();
         int height = getHeight();
         int padding = MapsUtil.DEFAULT_MAP_PADDING;
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds( bounds, width, height, padding );
-        googleMap.animateCamera( cameraUpdate );
+        googleMap.animateCamera( CameraUpdateFactory.newLatLngBounds( bounds, width, height, padding ) );
     }
 
     public void animateCamera( final LatLng location ) {
@@ -134,16 +132,16 @@ public class MapOverlayLayout extends FrameLayout {
         return new LatLng( lat, lng );
     }
 
-    public void addPolyline( final ArrayList<LatLng> polylines ) {
-        this.polyLines = polylines;
+    public void addPolyline( final ArrayList<LatLng> polyLines ) {
+        this.polyLines = polyLines;
         PolylineOptions options = new PolylineOptions();
-        for( int i = 1; i < polylines.size(); i++ ) {
-            options.add( polylines.get( i - 1 ), polylines.get( i ) ).width( 10 ).color( Color.RED ).geodesic( true );
+        for ( int i = 1; i < polyLines.size(); i++ ) {
+            options.add( polyLines.get( i - 1 ), polyLines.get( i ) ).width( 10 ).color( Color.RED ).geodesic( true );
         }
         currentPolyline = googleMap.addPolyline( options );
     }
 
     public void removeCurrentPolyline() {
-        if( currentPolyline != null ) currentPolyline.remove();
+        if ( currentPolyline != null ) currentPolyline.remove();
     }
 }

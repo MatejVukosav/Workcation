@@ -1,8 +1,10 @@
-package com.droidsonroids.workcation.common.model;
+package com.droidsonroids.workcation.common.data.providers;
 
 import android.content.res.AssetManager;
 
 import com.droidsonroids.workcation.common.WorkcationApp;
+import com.droidsonroids.workcation.common.model.Place;
+import com.droidsonroids.workcation.common.model.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
@@ -13,19 +15,18 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
 
-public class BaliDataProvider {
+public class MapDataProvider {
+
     private final static String JSON_PATH = "bali.json";
+    private static MapDataProvider sInstance;
+    private Places mPlaces;
 
-    private static BaliDataProvider sInstance;
-
-    private BaliData mBaliData;
-
-    private BaliDataProvider() {
+    private MapDataProvider() {
     }
 
-    public static BaliDataProvider instance() {
+    public static MapDataProvider instance() {
         if( sInstance == null ) {
-            sInstance = new BaliDataProvider();
+            sInstance = new MapDataProvider();
             return sInstance;
         }
         return sInstance;
@@ -41,7 +42,7 @@ public class BaliDataProvider {
             Gson gson = new Gson();
             Reader reader = new InputStreamReader( inputStream );
 
-            mBaliData = gson.fromJson( reader, BaliData.class );
+            mPlaces = gson.fromJson( reader, Places.class );
         } catch( IOException e ) {
             e.printStackTrace();
         }
@@ -49,21 +50,21 @@ public class BaliDataProvider {
 
     public LatLngBounds provideLatLngBoundsForAllPlaces() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for( Place place : mBaliData.getPlacesList() ) {
+        for( Place place : mPlaces.getPlacesList() ) {
             builder.include( new LatLng( place.getLat(), place.getLng() ) );
         }
         return builder.build();
     }
 
     public List<Place> providePlacesList() {
-        return mBaliData.getPlacesList();
+        return mPlaces.getPlacesList();
     }
 
     public double getLatByPosition( final int position ) {
-        return mBaliData.getPlacesList().get( position ).getLat();
+        return mPlaces.getPlacesList().get( position ).getLat();
     }
 
     public double getLngByPosition( final int position ) {
-        return mBaliData.getPlacesList().get( position ).getLng();
+        return mPlaces.getPlacesList().get( position ).getLng();
     }
 }

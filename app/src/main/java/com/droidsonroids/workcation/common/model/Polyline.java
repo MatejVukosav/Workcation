@@ -2,7 +2,7 @@ package com.droidsonroids.workcation.common.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Polyline {
+public final class Polyline {
 
     @SerializedName("points")
     String points;
