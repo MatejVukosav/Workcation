@@ -127,7 +127,7 @@
                     android:paddingTop="8dp"
                     android:textAppearance="@style/RobotoThin"
                     android:textColor="@color/item_place_description"
-                    tools:text="@string/lorem"/>
+                    tools:text="lorem ipsum"/>
             </LinearLayout>
 
             <Button

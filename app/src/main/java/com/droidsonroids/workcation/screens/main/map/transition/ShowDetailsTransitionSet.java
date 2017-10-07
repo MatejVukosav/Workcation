@@ -44,7 +44,7 @@ public class ShowDetailsTransitionSet extends TransitionSet {
     }
 
     private Transition slide() {
-        return new TransitionBuilder( TransitionInflater.from( context ).inflateTransition( R.transition.bali_details_enter_transition ) )
+        return new TransitionBuilder( TransitionInflater.from( context ).inflateTransition( R.transition.details_enter_transition ) )
                 .excludeTarget( transitionName, true )
                 .excludeTarget( to.binding.title, true )
                 .excludeTarget( to.binding.baliDetailsContainer, true )

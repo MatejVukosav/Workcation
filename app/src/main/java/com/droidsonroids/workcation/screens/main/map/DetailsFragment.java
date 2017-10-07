@@ -166,7 +166,7 @@ public class DetailsFragment extends MvpFragment<DetailsFragmentMvp.View, Detail
         currentTransitionName = transitionName;
         detailsCoordinatorLayout = (DetailsCoordinatorLayout) getActivity()
                 .getLayoutInflater()
-                .inflate( R.layout.item_place, binding.container, false );
+                .inflate( R.layout.model_item_place_details, binding.container, false );
 
         detailsCoordinatorLayout.showScene( binding.container, sharedView, transitionName, places.get( position ) );
 

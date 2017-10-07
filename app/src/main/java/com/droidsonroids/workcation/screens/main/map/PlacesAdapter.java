@@ -39,7 +39,7 @@ class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.BaliViewHolder> {
 
     @Override
     public BaliViewHolder onCreateViewHolder( final ViewGroup parent, final int viewType ) {
-        return new BaliViewHolder( LayoutInflater.from( parent.getContext() ).inflate( R.layout.item_bali_place, parent, false ) );
+        return new BaliViewHolder( LayoutInflater.from( parent.getContext() ).inflate( R.layout.model_item_place, parent, false ) );
     }
 
     @Override
@@ -64,7 +64,7 @@ class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.BaliViewHolder> {
 
     private void setFadeAnimation( View view, int position ) {
 
-        if( position > lastAnimatedPosition ) {
+        if ( position > lastAnimatedPosition ) {
             lastAnimatedPosition = position;
             AlphaAnimation anim = new AlphaAnimation( 0.f, 1.0f );
             anim.setDuration( 500 );
@@ -86,7 +86,7 @@ class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.BaliViewHolder> {
 
     void setPlacesList( List<Place> placesList ) {
         placeList = placesList;
-        for( int i = 0; i < placeList.size(); i++ ) {
+        for ( int i = 0; i < placeList.size(); i++ ) {
             notifyItemInserted( i );
         }
     }
